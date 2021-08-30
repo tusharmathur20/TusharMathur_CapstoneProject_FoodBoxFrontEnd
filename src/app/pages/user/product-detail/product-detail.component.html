@@ -1,0 +1,43 @@
+<app-user-navbar></app-user-navbar>
+
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-5 d-flex justify-content-center">
+            <img src="http://localhost:8081/image/product/{{product.id}}.png" height="300px" width="350px"
+                class="img-fluid rounded-start" alt="...">
+
+        </div>
+        <div class="col-sm-7 mt-5">
+            <h3><span *ngIf="addProductSuccess" style="color:forestgreen"><i class="fa fa-check"
+                        style="color:forestgreen"></i>Added to cart.</span></h3>
+            <h3><span *ngIf="notEnoughStock" style="color:red">Oops, Not in
+                    Stock.</span> </h3>
+            <h3><span *ngIf="login" style="color:red">Oops, Login First <span>to add in cart</span>
+                </span> </h3>
+
+            <h2><strong>{{product.name}}</strong></h2>
+            <p>{{product.category}}</p>
+            <h2>₹ <span style="color: #db3208;">{{product.price}}</span></h2>
+            <h5>
+                <span>{{product.description}}</span>
+            </h5>
+            <span>Qty: </span>
+            <select [(ngModel)]="qty" class="browser-default mt-2" style="width:50px; display:inline;">
+                <option *ngFor="let x of numberList" [ngValue]="x">{{x}}</option>
+            </select>
+            <div class="col-md-6">
+                <h4 *ngIf="product.inStock>10" style="color:green;">In Stock</h4>
+                <h4 *ngIf="product.inStock<10 && product.inStock>0" style="color:green;">Only
+                    <span>{{product.inStock}}</span> In Stock
+                </h4>
+                <h4 *ngIf="product.inStock==0" style="color:darkred;">Unavailable</h4>
+                <button mat-raised-button [disabled]="product.inStock==0" (click)="onAddToCart()"
+                    class="mat-primary mt-2">Add to Cart</button>
+            </div>
+            <p></p>
+
+        </div>
+    </div>
+</div>

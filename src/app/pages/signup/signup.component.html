@@ -1,0 +1,56 @@
+<app-user-navbar></app-user-navbar>
+
+<body>
+    <div class="signup-form">
+
+        <form (ngSubmit)="formSubmit()">
+            <h2>Register</h2>
+            <p class="hint-text">Create your account. It's free and only takes a minute.</p>
+            <div class="form-group">
+                <div class="row">
+                    <!-- <div *ngIf="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning !</strong> Fields Cannot be empty.
+                        <button (click)="closeAlert()" type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div> -->
+                    <div class="col"><input type="text" [(ngModel)]="user.firstName" class="form-control"
+                            name="firstName" placeholder="First Name" required="required"></div>
+                    <div class="col"><input type="text" [(ngModel)]="user.lastName" class="form-control" name="lastName"
+                            placeholder="Last Name" required></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="user.username" class="form-control" name="username"
+                    placeholder="Username" required="required">
+            </div>
+            <div class="form-group">
+                <input type="email" [(ngModel)]="user.email" class="form-control" name="email" placeholder="Email"
+                    required="required">
+            </div>
+            <div class="form-group">
+                <input type="password" [(ngModel)]="user.password" class="form-control" name="password"
+                    placeholder="Password" required="required">
+            </div>
+            <div class="form-group">
+                <input type="number" [(ngModel)]="user.phone" class="form-control" name="phone" placeholder="Phone"
+                    required="required">
+            </div>
+            <div class="form-group">
+                <label class="form-check-label"><input type="checkbox" required="required"> I accept the <a
+                        href="#">Terms
+                        of Use</a> &amp; <a href="#">Privacy Policy</a></label>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg btn-block">Register Now</button>
+            </div>
+        </form>
+        <div class="text-center">Already have an account? <a routerLink="/login">Sign in</a></div>
+    </div>
+</body>
+<!-- </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

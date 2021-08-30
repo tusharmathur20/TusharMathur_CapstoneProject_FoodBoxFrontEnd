@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+    <div class="row">
+
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" (change)="updateSelected($event)" />
+                    </th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">inStock</th>
+                    <th scope="col">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of productList">
+
+                    <td scope="row"><input hidden="hidden" name="id" />
+                        <input type="checkbox" [checked]="allChecked"
+                            (change)="updateRemoveProductList($event ,product)" />
+                    </td>
+                    <td><a (click)="onSelect(product)" style="cursor: pointer;">{{product.name}}</a></td>
+                    <td>{{product.category}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.inStock}}</td>
+                    <td>{{product.active}}</td>
+                    <td><input hidden="hidden" name="id">
+                        <button class="btn btn-danger" (click)="openDialog(product)" value="delete"><span
+                                class=" fa fa-times"></span>Delete</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-warning" id="deleteSelected" (click)="removeSelectedProducts()">Delete Selected</button>
+</div>

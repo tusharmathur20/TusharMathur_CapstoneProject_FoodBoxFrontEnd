@@ -1,0 +1,26 @@
+<app-navbar></app-navbar>
+
+
+<div class="container mt-5">
+    <a routerLink="/admin/product"><i class="fa fa-long-arrow-left "></i><b>Go Back</b></a>
+    <span> / </span>
+    <a (click)="onSelect(product)" routerLink="/admin/productList" style="cursor: pointer;"><b>Edit</b></a>
+    <div class="row">
+
+        <div class="col-sm-5 d-flex justify-content-center">
+            <img [src]="'http://localhost:8081/image/product/'+product.id+'.png'" height="300px" width="300px"
+                class="responsive-img" />
+
+        </div>
+        <div class="col-sm-7 mt-5">
+            <h2><strong>Name :</strong>{{product.name}}</h2>
+            <p><strong>Category :</strong> {{product.category}}</p>
+            <h2>₹ <span><strong>Price : </strong>{{product.price}}</span></h2>
+            <h4>
+                <span><strong>In Stock :</strong>{{product.inStock}}</span>
+            </h4>
+            <p> <strong>Description : </strong>{{product.description}}</p>
+
+        </div>
+    </div>
+</div>

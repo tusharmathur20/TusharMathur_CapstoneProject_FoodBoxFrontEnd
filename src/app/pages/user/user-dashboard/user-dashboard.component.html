@@ -1,0 +1,544 @@
+<app-user-navbar></app-user-navbar>
+
+
+<body></body>
+
+<div class="container mt-5">
+
+    <div class="row">
+        <div class="col-mat-10">
+
+
+            <mat-tab-group mat-align-tabs="start">
+                <mat-tab label="About User">
+                    <!--Table -->
+                    <h1 class="mt-3 text-center">{{user.firstName}} {{user.lastName}}</h1>
+
+
+                    <table class="table text-center m-auto">
+                        <tbody>
+                            <tr class="mt-2">
+                                <td><b>Username</b></td>
+                                <td>{{user.username}}</td>
+
+                            </tr>
+
+                            <tr class="m-auto">
+                                <td><b>UserId</b></td>
+                                <td>Foobox {{user.id}}</td>
+
+                            </tr>
+
+                            <tr>
+                                <!-- *ngIf="user.phone"  -->
+                                <td> <b>Phone</b> </td>
+                                <td>{{user.phone}}</td>
+
+                            </tr>
+
+                            <tr>
+                                <td> <b>Role</b> </td>
+                                <td>{{user.authorities[0].authority}}</td>
+                                <hr>
+                            </tr>
+
+                            <tr>
+                                <td> <b>Status</b> </td>
+                                <td>{{user.enabled?"ACTIVE":"NOTACTIVE"}}</td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+
+
+                </mat-tab>
+                <mat-tab label="Payment">
+
+
+                    <br>
+                    <br>
+                    <div>
+                        <p *ngIf="defaultPaymentSet">Default payment set successfully!</p>
+                        <mat-tab-group (selectedIndexChange)="selectedBillingChange($event)"
+                            [selectedIndex]="selectedBillingTab">
+                            <mat-tab label="List of Cards">
+                                <form (ngSubmit)="setDefaultPayment()" method="post">
+                                    <table class="table mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>Default</th>
+                                                <th>Credit Card</th>
+                                                <th>Operations</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let userPayment of userPaymentList">
+                                                <td>
+                                                    <input type="radio" name="defaultUserPaymentId"
+                                                        [(ngModel)]="defaultUserPaymentId" [value]="userPayment.id" />
+                                                    <span>default</span>
+                                                </td>
+                                                <td>{{userPayment.cardName}}</td>
+                                                <td>
+                                                    <a mat-button (click)="onUpdatePayment(userPayment)"><i
+                                                            class="fa fa-pencil"></i></a>
+                                                    <a mat-button (click)="onRemovePayment(userPayment.id)"><i
+                                                            class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button mat-raised-button class="mat-primary" type="submit">Save</button>
+                                </form>
+
+                            </mat-tab>
+                            <mat-tab label="Add(Update) Credit Card">
+                                <br>
+                                <div class="container ">
+                                    <div class="row justify-content-center">
+                                        <div class="form-group col-md-8 col-md-offset-2 align-center">
+
+
+                                            <form (ngSubmit)="onNewPayment()" method="post">
+                                                <h3>Billing details for credit cards</h3>
+                                                <!-- *ngIf="updateUserPaymentInfo" -->
+                                                <!-- <div class="bg-info">User info updated.</div> -->
+                                                <input hidden="hidden" name="id" [(ngModel)]="userPayment.id" />
+                                                <div class="form-group">
+                                                    <h5>* Give a name for your card:</h5>
+                                                    <input type="text" class="form-control" id="cardName"
+                                                        placeholder="Card Name" name="cardName" required="required"
+                                                        [(ngModel)]="userPayment.cardName" />
+                                                </div>
+                                                <!-- Billing Address -->
+                                                <hr />
+                                                <div class="form-group mt-2">
+                                                    <label for="billingName"><b>* Name</b></label>
+                                                    <input type="text" class="form-control" id="billingName"
+                                                        placeholder="Receiver name" name="userBillingName"
+                                                        required="required" [(ngModel)]="userBilling.userBillingName" />
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <label for="billingAddress"><b>* Street Address</b></label>
+                                                    <input type="text" class="form-control" id="billAddress"
+                                                        placeholder="Street Address 1" name="userBillingStreet1"
+                                                        required="required"
+                                                        [(ngModel)]="userBilling.userBillingStreet1" />
+                                                </div>
+                                                <div class="form-group mt-1">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Street Address 2" name="userBillingStreet2"
+                                                        [(ngModel)]="userBilling.userBillingStreet2" />
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="billingCity"><b>* City</b></label>
+                                                            <input type="text" class="form-control" id="userBillingCity"
+                                                                placeholder="Your Billing City" name="userBillingCity"
+                                                                required="required"
+                                                                [(ngModel)]="userBilling.userBillingCity" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group mt-2">
+                                                            <label for="billingZipcode"><b>* Zipcode</b></label>
+                                                            <input type="number" class="form-control"
+                                                                id="userBillingZipcode" placeholder="Zipcode"
+                                                                name="userBillingZipcode" required="required"
+                                                                [(ngModel)]="userBilling.userBillingZipcode" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- User Payment -->
+                                                <hr />
+                                                <div class="form-group">
+                                                    <h4>Credit Card Information</h4>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <img src="../../../assets/image/creditcard.png"
+                                                            class="img-responsive" />
+                                                        <br>
+                                                        <div class="form-group mt-2">
+                                                            <label for="cardType"><b>* Select Card Type</b></label>
+                                                            <select id="cardType" class="form-control" name="cardType"
+                                                                [(ngModel)]="userPayment.type" required="required">
+                                                                <option value="" disabled>-- Card Type --</option>
+                                                                <option value="visa">Visa</option>
+                                                                <option value="mastercard">Mastercard</option>
+                                                                <option value="discover">Discover</option>
+                                                                <option value="amex">American Express</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group mt-2">
+                                                            <label for="cardHolder"><b>* Card Holder</b></label>
+                                                            <input type="text" class="form-control" id="cardholder"
+                                                                placeholder="Card Holder Name" name="cardHolderName"
+                                                                required="required"
+                                                                [(ngModel)]="userPayment.holderName" />
+                                                        </div>
+                                                        <div class="form-group mt-2">
+                                                            <label for="cardNumber"><b>* Card Number</b></label>
+                                                            <div class="input-group">
+                                                                <input required="required" id="cardNumber" type="number"
+                                                                    class="form-control" name="cardNumber"
+                                                                    placeholder="Valid Card Number"
+                                                                    [(ngModel)]="userPayment.cardNumber" />
+                                                                <span class="input-group-addon"><i
+                                                                        class="fa fa-credit-card"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <div class="form-group mt-2">
+                                                            <label><b>* Expiration Date</b></label>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <select class="form-control" name="expiryMonth"
+                                                                        required="required"
+                                                                        [(ngModel)]="userPayment.expiryMonth">
+                                                                        <option value="" disabled="disabled">
+                                                                            -- Month --
+                                                                        </option>
+                                                                        <option value="1">Jan (01)</option>
+                                                                        <option value="2">Feb (02)</option>
+                                                                        <option value="3">Mar (03)</option>
+                                                                        <option value="4">Apr (04)</option>
+                                                                        <option value="5">May (05)</option>
+                                                                        <option value="6">Jun (06)</option>
+                                                                        <option value="7">July (07)</option>
+                                                                        <option value="8">Aug (08)</option>
+                                                                        <option value="9">Sep (09)</option>
+                                                                        <option value="10">Oct (10)</option>
+                                                                        <option value="11">Nov (11)</option>
+                                                                        <option value="12">Dec (12)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <select class="form-control" name="expiryYear"
+                                                                        required="required"
+                                                                        [(ngModel)]="userPayment.expiryYear">
+                                                                        <option value="" disabled="disabled">
+                                                                            -- Year --
+                                                                        </option>
+
+
+                                                                        <option value="22">2022</option>
+                                                                        <option value="23">2023</option>
+                                                                        <option value="24">2024</option>
+                                                                        <option value="25">2025</option>
+                                                                        <option value="26">2026</option>
+                                                                        <option value="27">2027</option>
+                                                                        <option value="28">2028</option>
+                                                                        <option value="29">2029</option>
+                                                                        <option value="30">2030</option>
+                                                                        <option value="31">2031</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5 pull-right">
+                                                        <div class="form-group mt-2">
+                                                            <label for="cardCVC"><b>CVV Code</b></label>
+                                                            <input id="cardCVC" type="number" class="form-control"
+                                                                name="cardCVC" placeholder="CVV"
+                                                                [(ngModel)]="userPayment.cvc" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <button mat-raised-button type="submit" class="mat-primary">
+                                                    Save All
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Shipping Address">
+
+                    <br>
+                    <br>
+                    <div>
+                        <p *ngIf="defaultShippingSet">Default shipping set successfully!</p>
+                        <mat-tab-group (selectedIndexChange)="selectedShippingChange($event)"
+                            [selectedIndex]="selectedShippingTab">
+                            <mat-tab label="List of Shipping Addresses">
+                                <form (ngSubmit)="setDefaultShipping()" method="post">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Default</th>
+                                                <th>Shipping Address</th>
+                                                <th>Operations</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let userShipping of userShippingList">
+                                                <td>
+                                                    <input type="radio" name="defaultUserShippingId"
+                                                        [(ngModel)]="defaultUserShippingId" [value]="userShipping.id" />
+                                                    <span>default</span>
+                                                </td>
+                                                <td>{{userShipping.userShippingStreet1}},
+                                                    {{userShipping.userShippingCity}}</td>
+                                                <td>
+                                                    <a mat-button (click)="onUpdateShipping(userShipping)"><i
+                                                            class="fa fa-pencil"></i></a>
+                                                    <a mat-button (click)="onRemoveShipping(userShipping.id)"><i
+                                                            class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button mat-raised-button class="mat-primary" type="submit">Save</button>
+                                </form>
+                            </mat-tab>
+                            <!-- *ngIf="updateUserShippingInfo" -->
+                            <mat-tab label="Add(Update) Shipping Address">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="form-group col-md-8 col-md-offset-2 align-center">
+
+                                            <form (ngSubmit)="onNewShipping()" method="post">
+                                                <!-- <div class="bg-info">User info updated.</div> -->
+                                                <input hidden="hidden" name="id" [(ngModel)]="userShipping.id" />
+                                                <div class="form-group mt-3 ">
+                                                    <label for="shippingname"><b>* Name</b></label>
+                                                    <input type="text" class="form-control" id="shippingName"
+                                                        placeholder="Receiver Name" name="userShippingName"
+                                                        required="required"
+                                                        [(ngModel)]="userShipping.userShippingName" />
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="shippingAddress"> <b>* Street Address</b> </label>
+                                                    <input type="text" class="form-control" id="shippingAddress"
+                                                        placeholder="Street Address 1" name="userShippingStreet1"
+                                                        required="required"
+                                                        [(ngModel)]="userShipping.userShippingStreet1" />
+                                                </div>
+                                                <div class="form-group mt-1">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Street Address 2" name="userShippingStreet2"
+                                                        [(ngModel)]="userShipping.userShippingStreet2" />
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group mt-3">
+                                                            <label for="shippingCity"><b>* City</b></label>
+                                                            <input type="text" class="form-control" id="shippingCity"
+                                                                placeholder="Your Shipping City" name="userShippingCity"
+                                                                required="required"
+                                                                [(ngModel)]="userShipping.userShippingCity" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 mt-3">
+                                                        <div class="form-group">
+                                                            <label for="shippingZipcode"><b>* Zipcode</b></label>
+                                                            <input type="number" class="form-control"
+                                                                id="userShippingZipcode" placeholder="Zipcode"
+                                                                name="userShippingZipcode" required="required"
+                                                                [(ngModel)]="userShipping.userShippingZipcode" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <button mat-raised-button type="submit" class="mat-primary">
+                                                    Save All
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+
+
+
+                </mat-tab>
+                <mat-tab label="Orders">
+                    <div class="card-group">
+                        <div class="card card-default card-faq" style="border: none;">
+                            <div class="card-body" style="background-color: #ededed; margin-top: 20px;">
+                                <table class="table table-sm table-inverse">
+                                    <thead>
+                                        <tr>
+                                            <th>Order Date</th>
+                                            <th>Order Number</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let order of orderList">
+                                            <td>
+                                                <a class="pointer"
+                                                    (click)="onDisplayOrder(order)"><span>{{order.orderDate}}</span></a>
+                                            </td>
+                                            <td>{{order.id}}</td>
+                                            <td>{{order.orderTotal}}</td>
+                                            <td>{{order.orderStatus}}</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="displayOrderDetail">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="text-center">
+                                                <h2>Order Detail for purchase #<span>{{order.id}}</span></h2>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="card card-default height">
+                                                        <div class="card-heading"><strong>Billing Details</strong>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <span>{{order.billingAddress.billingAddressName}}</span>
+                                                            <br />
+                                                            <span>{{order.billingAddress.billingAddressStreet1}}
+                                                                {{order.billingAddress.billingAddressStreet2}}</span>
+                                                            <br />
+                                                            <span>{{order.billingAddress.billingAddressCity}}</span>
+
+                                                            <br />
+                                                            <span>{{order.billingAddress.billingAddressZipcode}}</span>
+                                                            <br />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card card-default height">
+                                                        <div class="card-heading"><strong>Payment Information</strong>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <span>{{order.payment.holderName}}</span>
+                                                            <br /> Visa
+                                                            <br />
+                                                            <span>{{order.payment.cardNumber}}</span>
+                                                            <br />
+                                                            <span>Exp Date:</span>
+                                                            <span>{{order.payment.expiryMonth}}</span>/<span>{{order.payment.expiryYear}}</span>
+                                                            <br />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card card-default height">
+                                                        <div class="card-heading"><strong>Shipping Address</strong>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <span>{{order.shippingAddress.shippingAddressName}}</span>
+                                                            <br />
+                                                            <span>{{order.shippingAddress.shippingAddressStreet1}}'
+                                                                '{{order.shippingAddress.shippingAddressStreet2}}</span>
+                                                            <br />
+                                                            <span>{{order.shippingAddress.shippingAddressCity}}</span>
+
+
+                                                            <br />
+                                                            <span>{{order.shippingAddress.shippingAddressZipcode}}</span>
+                                                            <br />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card card-default">
+                                                <div class="card-heading">
+                                                    <h3 class="text-center"><strong>Order summary</strong></h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td><strong>Item Name</strong></td>
+                                                                    <td class="text-center"><strong>Item Price</strong>
+                                                                    </td>
+                                                                    <td class="text-center"><strong>Item
+                                                                            Quantity</strong>
+                                                                    </td>
+                                                                    <td class="text-right"><strong>Total</strong></td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let cartItem of cartItemList">
+                                                                    <td>{{cartItem.product.name!}}
+                                                                    </td>
+                                                                    <td class="text-center">{{cartItem.product.price}}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        {{cartItem.qty}}
+                                                                    </td>
+                                                                    <td class="text-right">{{cartItem.subtotal}}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="highrow"></td>
+                                                                    <td class="highrow"></td>
+                                                                    <td class="highrow text-center">
+                                                                        <strong>Subtotal</strong>
+                                                                    </td>
+                                                                    <td class="highrow text-right">{{order.orderTotal}}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="emptyrow"></td>
+                                                                    <td class="emptyrow"></td>
+                                                                    <td class="emptyrow text-center">
+                                                                        <strong>Tax</strong>
+                                                                    </td>
+                                                                    <td class="emptyrow text-right">
+                                                                        {{order.orderTotal*0.06}}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="emptyrow"><i
+                                                                            class="fa fa-barcode iconbig"></i></td>
+                                                                    <td class="emptyrow"></td>
+                                                                    <td class="emptyrow text-center">
+                                                                        <strong>Total</strong>
+                                                                    </td>
+                                                                    <td class="emptyrow text-right">
+                                                                        {{order.orderTotal*1.06}}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+
+
+        </div>
+    </div>
+</div>

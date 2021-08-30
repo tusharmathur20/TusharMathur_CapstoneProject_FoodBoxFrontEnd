@@ -1,0 +1,17 @@
+/* .nav-link {
+  flex: 1 1 auto;
+} */
+/* ul {
+  float: right;
+} */
+
+.nav-link,
+.navbar-brand,
+.navbar-toggler,
+.btn-outline-success,
+.navbar-toggler-icon {
+  color: white !important;
+}
+.navbar-expand-lg {
+  background-color: #008080;
+}

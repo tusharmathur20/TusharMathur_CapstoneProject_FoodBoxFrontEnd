@@ -1,0 +1,66 @@
+<app-user-navbar></app-user-navbar>
+
+
+<!-- [mfData]="bookList | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder" -->
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-9">
+        <h2 class="text-center mt-5"> Foods you have been craving for : </h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="5">
+                        <div class="row">
+                            <div class="col-md-7">
+                                Search:
+                                <input class="form-control" type="text" [(ngModel)]="searchedKeyword" />
+                            </div>
+
+                        </div>
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of productList | filter:searchedKeyword | paginate : {
+                    itemsPerPage: tableSize,
+                    currentPage: page,
+                    totalItems: count
+                  };">
+                    <div class="row" style="margin-bottom: 30px;">
+                        <div class="col-md-3">
+                            <a (click)="onSelect(product)" style="cursor:pointer;">
+                                <img class="img-responsive" src="http://localhost:8081/image/product/{{product.id}}.png"
+                                    height="220px" width="200px" />
+                            </a>
+                        </div>
+                        <div class="col-md-9">
+                            <h4 (click)="onSelect(product)" style="margin-top:20px; cursor:pointer;">
+                                <b>{{product.name}}</b>
+                            </h4>
+                            <span class="mt-1"><b>Category : </b> {{product.category}}</span><span> </span>
+                            <br />
+                            <a><span style="font-size: x-large; color:#db3208">Rs.<span
+                                        class="mt-2">{{product.price}}</span></span></a>
+                            <!-- <span style="text-decoration:line-through;">$<span>{{product.price}}</span></span> -->
+                            <p class="mt-2">{{product.description}}</p>
+                            <button (click)="onSelect(product)" class="btn btn-primary mt-2">View </button>
+                        </div>
+                    </div>
+
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <pagination-controls responsive:any="true" previousLabel="Prev" nextLabel="Next"
+                            (pageChange)="onTableDataChange($event)">
+                        </pagination-controls>
+                        <!-- <mfBootstrapPaginator [rowsOnPageSet]="[5,10,15]"></mfBootstrapPaginator> -->
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

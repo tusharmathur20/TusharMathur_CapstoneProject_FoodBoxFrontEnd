@@ -1,0 +1,38 @@
+<app-user-navbar></app-user-navbar>
+
+<div class="container">
+    <div class="row" style="margin-top: 120px;">
+        <div class="alert alert-success">
+            <h3><i class="fa fa-check" style="color:limegreen;"></i> Thank you, your order has been placed. </h3>
+            <!-- <h4>The estimated delivery Time is <span>{{estimatedDeliveryTime}}</span> Minutes</h4> -->
+            <h4>Will be deliverd soon</h4>
+        </div>
+        <!-- <h3>List of Items</h3> -->
+        <div class="row" *ngFor="let cartItem of cartItemList">
+            <hr />
+            <div class="col-md-2">
+                <a mat-button><img class="img-responsive"
+                        src="http://localhost:8081/image/product/{{cartItem.product.id}}.png" style="width:70px;" /></a>
+            </div>
+            <div class="col-md-6">
+                <a class="pointer">
+                    <h4>{{cartItem.product.name}}</h4>
+                </a>
+                <p *ngIf="cartItem.product.inStock > 10" style="color:green;">In Stock</p>
+                <p *ngIf="cartItem.product.inStock < 10 && cartItem.product.inStock > 0" style="color:green;">Only
+                    <span>{{cartItem.product.inStock}}</span> In Stock
+                </p>
+                <p *ngIf="cartItem.product.inStock == 0" style="color:darkred;">Product Unavailable</p>
+                <!-- <a class="pointer" (click)="onRemoveCartItem(cartItem)">delete</a> -->
+            </div>
+            <div class="col-md-2">
+                <h5 style="color:#db3208; font-size:large;">₹<span
+                        [ngClass]="{'text-strike': cartItem.product.inStock == 0}">{{cartItem.product.price}}</span>
+                </h5>
+            </div>
+            <div class="col-md-2 text-center">
+                <h5 style="font-size: large">{{cartItem.qty}}</h5>
+            </div>
+        </div>
+    </div>
+</div>

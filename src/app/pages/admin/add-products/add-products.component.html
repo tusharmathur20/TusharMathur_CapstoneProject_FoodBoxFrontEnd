@@ -1,0 +1,79 @@
+<app-navbar></app-navbar>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-5 offset-md-3">
+            <div [hidden]="productAdded">
+                <h2 class="text-center"><b>Add a new Product</b></h2>
+                <!-- {{newProduct | json}} -->
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-row">
+                        <div class="form-group mb-3 ">
+                            <label for="name">Name</label>
+                            <input required [(ngModel)]="newProduct.name" type="name" class="form-control" name="name"
+                                placeholder="Enter items">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="description">Description</label>
+                            <textarea required [(ngModel)]="newProduct.description" type="text" class="form-control"
+                                name="description" placeholder="Description">
+                                </textarea>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="price">Price</label>
+                        <input required [(ngModel)]="newProduct.price" type="number" class="form-control" name="price"
+                            placeholder="Price">
+                    </div>
+
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="category">Category</label>
+                        <select required [(ngModel)]="newProduct.category" name="category" class="form-control">
+                            <option selected>Choose...</option>
+                            <option>Indian</option>
+                            <option>Chinese</option>
+                            <option>Italian</option>
+                            <option>Continental</option>
+                            <option>FastFood</option>
+                            <option>Restaurant Special</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="instock">InStock</label>
+                        <input required [(ngModel)]="newProduct.inStock" id="inStock" type="text" class="form-control"
+                            name="inStock" placeholder="In Stock">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check mb-3">
+                            <input required [(ngModel)]="newProduct.active" [checked] class="form-check-input"
+                                type="checkbox" name="active">
+                            <label class="active" for="gridCheck">
+                                Is Active
+                            </label>
+                        </div>
+                    </div>
+                    <label class="custom-file-label" for="inputGroupFile04"><b>Choose Image</b></label>
+                    <div class="input-group mt-1">
+                        <div class="custom-file">
+                            <input required type="file" class="custom-file-input" id="productImage"
+                                (change)="onFileSelected($event)" name="productImage">
+
+                        </div>
+                    </div>
+                    <div class="container text-center mt-3">
+                        <button type="submit" class="btn btn-primary m-3">Add a
+                            Product</button>
+                        <button type="reset" class="btn btn-primary m-3">Reset</button>
+                        <button type="button" routerLink="/admin" class="btn btn-warning">Back</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row" [hidden]="!productAdded">
+        <h3>Product Successfully added</h3>
+    </div>
+</div>
