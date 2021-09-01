@@ -11,6 +11,6 @@ RUN npm run build --prod
 
 # CMD ["npm","start"]
 
-FROM nginx:alpine
-COPY --from=node app/dist/FoodBoxFront /usr/share/nginx/html
+# FROM nginx:alpine
+# COPY --from=node app/dist/FoodBoxFront /usr/share/nginx/html
 
