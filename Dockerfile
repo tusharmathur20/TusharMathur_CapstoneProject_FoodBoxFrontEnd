@@ -7,10 +7,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install -g npm@7.21.1
-RUN npm run build
+RUN npm run build --prod
 
 CMD ["npm","start"]
 
-# FROM nginx:alpine
-# COPY src/nginx/etc/conf.d/default.conf  /etc/nginx/conf/default.conf
-# COPY --from=builder app/dist/FoodBoxFront usr/share/nginx/html
