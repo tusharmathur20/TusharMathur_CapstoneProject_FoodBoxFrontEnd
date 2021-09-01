@@ -1,16 +1,16 @@
-# FROM node:latest as builder
+FROM node:latest as builder
 
 # RUN mkdir -p /app
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY . .
+COPY . .
 
-# RUN npm install
-# RUN npm run build
+RUN npm install
+RUN npm run build --prod
 
 # CMD ["npm","start"]
 
-FROM nginx:1.17.1-alpine
-COPY /dist/FoodBoxFront /usr/share/nginx/html
+FROM nginx:alpine
+COPY --from=node app/dist/FoodBoxFront /usr/share/nginx/html
 
